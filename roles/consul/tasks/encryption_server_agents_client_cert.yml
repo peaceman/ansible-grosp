@@ -1,0 +1,43 @@
+---
+- name: Ensure existing client certs directory directory
+  file:
+    path: "{{ consul_client_certs_dir }}"
+    state: directory
+
+- name: Create client cert private key for {{ hostname }}
+  openssl_privatekey:
+    backup: yes
+    type: ECC
+    curve: secp384r1
+    path: "{{ consul_client_certs_dir }}/{{ hostname }}-key.pem"
+
+- name: Create client cert CSR for {{ hostname }}
+  openssl_csr:
+    path: "{{ consul_client_certs_dir }}/{{ hostname }}.csr"
+    privatekey_path: "{{ consul_client_certs_dir }}/{{ hostname }}-key.pem"
+    basic_constraints:
+      - "CA:FALSE"
+    basic_constraints_critical: yes
+    key_usage:
+      - keyEncipherment
+      - digitalSignature
+    key_usage_critical: yes
+    extended_key_usage:
+      - serverAuth
+      - clientAuth
+    create_subject_key_identifier: yes
+    common_name: server.{{ consul_datacenter }}.{{ consul_domain }}
+    subject_alt_name:
+      - "DNS:server.{{ consul_datacenter }}.{{ consul_domain }}"
+      - "DNS:localhost"
+      - "IP:127.0.0.1"
+
+- name: Create certificate for {{ hostname }}
+  openssl_certificate:
+    provider: ownca
+    ownca_path: "{{ consul_ca_dir }}/ca.pem"
+    ownca_privatekey_path: "{{ consul_ca_dir }}/ca-key.pem"
+    path: "{{ consul_client_certs_dir }}/{{ hostname }}.pem"
+    privatekey_path: "{{ consul_client_certs_dir }}/{{ hostname }}-key.pem"
+    csr_path: "{{ consul_client_certs_dir }}/{{ hostname }}.csr"
+    backup: yes

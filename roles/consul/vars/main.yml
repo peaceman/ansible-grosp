@@ -1,0 +1,3 @@
+---
+consul_ca_dir: "{{ local_data_dir }}/consul/{{ consul_ca_dirname }}"
+consul_client_certs_dir: "{{ local_data_dir }}/consul/{{ consul_client_certs_dirname }}"

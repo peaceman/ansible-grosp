@@ -1,0 +1,15 @@
+---
+- name: UFW consul
+  include_role:
+    name: weareinteractive.ufw
+  vars:
+    ufw_reset: no
+    ufw_rules:
+      - { port: 8300, rule: allow }
+      - { port: 8301, rule: allow }
+
+- name: Install consul
+  include_tasks: consul_install.yml
+
+- name: Configure consul
+  include_tasks: consul_configure.yml

@@ -1,0 +1,39 @@
+- include_tasks: consul_ca_cert.yml
+
+- include_tasks: consul_server_cert.yml
+  when: "'consul_server' in group_names"
+
+- name: Create common consul configuration file
+  template:
+    src: consul_common.hcl.j2
+    dest: "{{ consul_config_dir }}/consul.hcl"
+    owner: "{{ consul_user }}"
+    group: "{{ consul_user }}"
+  vars:
+    consul_gossip_key: "{{ lookup('file', [local_data_dir, 'consul', consul_gossip_key_filename] | join('/')) }}"
+    consul_server_nodes: "{{ groups['consul_server'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | list }}"
+
+- name: Create specific (client/server) consul configuration file
+  template:
+    src: consul_{{ 'server' if 'consul_server' in group_names else 'client' }}.hcl.j2
+    dest: "{{ consul_config_dir }}/{{ 'server' if 'consul_server' in group_names else 'client' }}.hcl"
+    owner: "{{ consul_user }}"
+    group: "{{ consul_user }}"
+  vars:
+    consul_gossip_key: "{{ lookup('file', [local_data_dir, 'consul', consul_gossip_key_filename] | join('/')) }}"
+    consul_server_nodes: "{{ groups['consul_server'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | list }}"
+
+- name: Activate consul service
+  systemd:
+    name: "{{ consul_service_name }}.service"
+    state: restarted
+    enabled: yes
+
+- name: Add consul environment variables to use with the consul cli
+  template:
+    src: consul_env.sh.j2
+    dest: /etc/profile.d/consul-env.sh
+  vars:
+    consul_ca_cert_file: "{{ consul_config_dir }}/consul-agent-ca.pem"
+    consul_client_cert_file: "{{ consul_config_dir }}/{{ inventory_hostname_short }}.pem"
+    consul_client_key_file: "{{ consul_config_dir }}/{{ inventory_hostname_short }}-key.pem"

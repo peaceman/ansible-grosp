@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+export CONSUL_CACERT={{ consul_ca_cert_file }}
+
+{% if 'consul_server' in group_names %}
+export CONSUL_CLIENT_CERT={{ consul_client_cert_file }}
+export CONSUL_CLIENT_KEY={{ consul_client_key_file }}
+{% endif %}

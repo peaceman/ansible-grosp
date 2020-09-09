@@ -1,0 +1,14 @@
+---
+- name: Supply client certificate key
+  copy:
+    src: "{{ consul_client_certs_dir }}/{{ inventory_hostname_short }}-key.pem"
+    dest: "{{ consul_config_dir }}/{{ inventory_hostname_short }}-key.pem"
+    owner: "{{ consul_user }}"
+    group: "{{ consul_user }}"
+
+- name: Supply client certificate
+  copy:
+    src: "{{ consul_client_certs_dir }}/{{ inventory_hostname_short }}.pem"
+    dest: "{{ consul_config_dir }}/{{ inventory_hostname_short }}.pem"
+    owner: "{{ consul_user }}"
+    group: "{{ consul_user }}"

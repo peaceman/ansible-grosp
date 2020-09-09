@@ -1,0 +1,17 @@
+---
+- name: Check fs stat of the symmetric encryption key file
+  stat:
+    path: "{{ local_data_dir }}/consul/{{ consul_gossip_key_filename }}"
+  register: key_file
+
+- name: Generate symmetric encryption key for the gossip protocol
+  when: not key_file.stat.exists
+  block:
+    - name: Generate key via openssl
+      command:
+        cmd: openssl rand -base64 16
+      register: key
+    - name: Store key at {{ local_data_dir }}/{{ consul_gossip_key_filename }}
+      copy:
+        dest: "{{ local_data_dir }}/consul/{{ consul_gossip_key_filename }}"
+        content: "{{ key.stdout }}"

@@ -1,0 +1,40 @@
+---
+- name: Ensure existing CA directory
+  file:
+    path: "{{ consul_ca_dir }}"
+    state: directory
+
+- name: Create the CA private key
+  openssl_privatekey:
+    backup: yes
+    type: ECC
+    curve: secp384r1
+    path: "{{ consul_ca_dir }}/ca-key.pem"
+
+- name: Create the CA CSR
+  openssl_csr:
+    path: "{{ consul_ca_dir }}/ca.csr"
+    privatekey_path: "{{ consul_ca_dir }}/ca-key.pem"
+    basic_constraints:
+      - "CA:TRUE"
+    basic_constraints_critical: yes
+    key_usage:
+      - keyCertSign
+      - cRLSign
+      - digitalSignature
+    key_usage_critical: yes
+    create_subject_key_identifier: yes
+
+- name: Create the CA certificate
+  openssl_certificate:
+    provider: selfsigned
+    path: "{{ consul_ca_dir }}/ca.pem"
+    privatekey_path: "{{ consul_ca_dir }}/ca-key.pem"
+    csr_path: "{{ consul_ca_dir }}/ca.csr"
+    backup: yes
+
+- name: Create client TLS certs for consul server agents
+  include_tasks: encryption_server_agents_client_cert.yml
+  loop: "{{ groups['consul_server'] | map('extract', hostvars, ['inventory_hostname_short']) | list }}"
+  loop_control:
+    loop_var: hostname

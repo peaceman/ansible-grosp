@@ -1,0 +1,10 @@
+server = true
+bootstrap_expect = {{ consul_server_nodes | length }}
+
+cert_file = "/etc/consul.d/{{ inventory_hostname_short }}.pem"
+key_file = "/etc/consul.d/{{ inventory_hostname_short }}-key.pem"
+
+verify_incoming = true
+auto_encrypt {
+  allow_tls = true
+}

@@ -1,0 +1,34 @@
+Ansible Role: consul
+=========
+
+Role Variables
+--------------
+
+Uses
+
+```
+# folder on the host that executes ansible
+# will be used to store consuls certificate authority and symmetric gossip encryption key
+local_data_dir: data
+```
+
+Defines
+
+```
+# will be used as filename to store the generated key in the directory defined by local_data_dir
+consul_gossip_key_filename: gossip.key
+
+# will be used as dirname to store ca related files below $local_data_dir/consul
+consul_ca_dirname: ca
+
+# will be used as dirname to store client certificates for the consul server agent nodes
+# below $local_data_dir/consul
+consul_client_certs_dirname: client-certs
+
+consul_domain: consul
+consul_datacenter: dc1
+
+consul_config_dir: /etc/consul.d
+consul_user: consul
+consul_service_name: consul
+```

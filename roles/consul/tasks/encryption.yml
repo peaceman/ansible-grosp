@@ -1,0 +1,11 @@
+---
+- debug:
+    var: hostvars
+
+- name: Ensure the local data directory for consul exists
+  file:
+    path: "{{ local_data_dir }}/consul"
+    state: directory
+
+- include_tasks: encryption_gossip.yml
+- include_tasks: encryption_ca.yml
