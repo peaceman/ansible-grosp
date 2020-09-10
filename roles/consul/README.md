@@ -18,6 +18,10 @@ Defines
 # will be used as filename to store the generated key in the directory defined by local_data_dir
 consul_gossip_key_filename: gossip.key
 
+# optional, if defined will be used instead of a combination of consul_gossip_key_filename
+# and local_data_dir to read the gossip key
+consul_gossip_key_file:
+
 # will be used as dirname to store ca related files below $local_data_dir/consul
 consul_ca_dirname: ca
 
@@ -31,4 +35,12 @@ consul_datacenter: dc1
 consul_config_dir: /etc/consul.d
 consul_user: consul
 consul_service_name: consul
+
+# folder on the host that executes ansible
+# will be used to store consuls certificate authority and symmetric gossip encryption key
+local_data_dir: data
+
+# optional, if defined will be used as source of consul nodes instead of relying on the
+# ansible host group consul_server
+consul_server_nodes: []
 ```

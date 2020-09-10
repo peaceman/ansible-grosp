@@ -10,8 +10,8 @@
     owner: "{{ consul_user }}"
     group: "{{ consul_user }}"
   vars:
-    consul_gossip_key: "{{ lookup('file', [local_data_dir, 'consul', consul_gossip_key_filename] | join('/')) }}"
-    consul_server_nodes: "{{ groups['consul_server'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | list }}"
+    consul_gossip_key: "{{ lookup('file', consul_gossip_key_file_internal) }}"
+    consul_server_nodes: "{{ consul_server_nodes_internal }}"
 
 - name: Create specific (client/server) consul configuration file
   template:
@@ -20,8 +20,8 @@
     owner: "{{ consul_user }}"
     group: "{{ consul_user }}"
   vars:
-    consul_gossip_key: "{{ lookup('file', [local_data_dir, 'consul', consul_gossip_key_filename] | join('/')) }}"
-    consul_server_nodes: "{{ groups['consul_server'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | list }}"
+    consul_gossip_key: "{{ lookup('file', consul_gossip_key_file_internal) }}"
+    consul_server_nodes: "{{ consul_server_nodes_internal }}"
 
 - name: Activate consul service
   systemd:

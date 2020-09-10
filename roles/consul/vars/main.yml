@@ -1,3 +1,10 @@
 ---
 consul_ca_dir: "{{ local_data_dir }}/consul/{{ consul_ca_dirname }}"
 consul_client_certs_dir: "{{ local_data_dir }}/consul/{{ consul_client_certs_dirname }}"
+
+consul_gossip_key_file_default: "{{ [local_data_dir, 'consul', consul_gossip_key_filename] | join('/')
+[local_data_dir, 'consul', consul_gossip_key_filename] | join('/') }}"
+consul_gossip_key_file_internal: "{{ consul_gossip_key_file | default(consul_gossip_key_file_default, true) }}"
+
+consul_server_nodes_default: "{{ groups['consul_server'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | list }}"
+consul_server_nodes_internal: "{{ consul_server_nodes | default(consul_server_nodes_default, true) }}"
