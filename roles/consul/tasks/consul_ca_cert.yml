@@ -1,7 +1,7 @@
 ---
 - name: Supply CA certificate
   copy:
-    src: "{{ consul_ca_dir }}/ca.pem"
+    src: "{{ consul_ca_file_internal }}"
     dest: "{{ consul_config_dir }}/consul-agent-ca.pem"
     owner: "{{ consul_user }}"
     group: "{{ consul_user }}"

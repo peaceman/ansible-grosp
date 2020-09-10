@@ -25,6 +25,10 @@ consul_gossip_key_file:
 # will be used as dirname to store ca related files below $local_data_dir/consul
 consul_ca_dirname: ca
 
+# optional, if defined will be used instead of a combination of consul_ca_dirname
+# and a fixed file name as source while moving the ca certificate to servers
+consul_ca_file:
+
 # will be used as dirname to store client certificates for the consul server agent nodes
 # below $local_data_dir/consul
 consul_client_certs_dirname: client-certs
