@@ -1,0 +1,24 @@
+---
+- name: Ensure the local data directory for nss exists
+  file:
+    path: "{{ local_data_dir }}/nss"
+    state: directory
+
+- include_tasks: encryption_ca.yml
+
+- name: Generate nss server certificate that is shared between all edge nodes
+  include_tasks: encryption_cert.yml
+  vars:
+    cert_name: server
+
+- name: Create nss client certs for hosts in group {{ nss_client_certs_group_name }}
+  include_tasks: encryption_cert.yml
+  loop: >
+    {{
+      groups[nss_client_certs_group_name]
+      | default([])
+      | map('extract', hostvars, ['inventory_hostname_short'])
+      | list
+    }}
+  loop_control:
+    loop_var: cert_name

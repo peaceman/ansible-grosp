@@ -1,0 +1,7 @@
+---
+# vars file for nss
+nss_ca_dir: "{{ local_data_dir }}/nss/{{ nss_ca_dirname }}"
+nss_certs_dir: "{{ local_data_dir }}/nss/{{ nss_certs_dirname }}"
+
+nss_ca_file_default: "{{ nss_ca_dir }}/ca.pem"
+nss_ca_file_internal: "{{ nss_ca_file | default(nss_ca_file_default, true) }}"

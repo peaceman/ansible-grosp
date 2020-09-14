@@ -9,7 +9,7 @@ ca_file = "/etc/consul.d/consul-agent-ca.pem"
 verify_outgoing = true
 verify_server_hostname = true
 
-retry_join = [{{ consul_server_nodes | peaceman.grosp.wrap | join(', ') }}]
+retry_join = [{{ consul_server_nodes_internal | peaceman.grosp.wrap | join(', ') }}]
 
 performance {
   # https://www.consul.io/docs/agent/options.html#raft_multiplier
