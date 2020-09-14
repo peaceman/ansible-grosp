@@ -25,6 +25,7 @@
       - serverAuth
       - clientAuth
     create_subject_key_identifier: yes
+    common_name: "{{ cert_name }}"
 
 - name: Create shared nss {{ cert_name }} certificate
   openssl_certificate:

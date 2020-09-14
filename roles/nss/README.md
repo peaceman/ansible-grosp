@@ -23,4 +23,7 @@ nss_certs_dirname: certs
 
 # will be used to determine the necessary client certificates for nss
 nss_client_certs_group_name: nss_clients
+
+# used as subject in the server certificate that is distributed to all edge nodes
+nss_edge_node_cert_name: edgenode
 ```

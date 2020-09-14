@@ -9,7 +9,7 @@
 - name: Generate nss server certificate that is shared between all edge nodes
   include_tasks: encryption_cert.yml
   vars:
-    cert_name: server
+    cert_name: "{{ nss_edge_node_cert_name }}"
 
 - name: Create nss client certs for hosts in group {{ nss_client_certs_group_name }}
   include_tasks: encryption_cert.yml

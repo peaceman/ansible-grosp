@@ -1,7 +1,4 @@
 ---
-- debug:
-    var: hostvars
-
 - name: Ensure the local data directory for consul exists
   file:
     path: "{{ local_data_dir }}/consul"
