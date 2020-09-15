@@ -1,0 +1,7 @@
+---
+- name: Add consul service definition
+  template:
+    src: "{{ template }}"
+    dest: "{{ consul_config_dir }}/{{ name }}.yml"
+  notify:
+    - reload consul

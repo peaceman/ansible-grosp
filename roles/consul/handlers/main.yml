@@ -1,1 +1,5 @@
 ---
+- name: reload consul
+  systemd:
+    name: "{{ consul_service_name }}"
+    state: reloaded
