@@ -24,3 +24,6 @@ nss_cert_key_file:
 
 nss_docker_compose_project_folder: /opt/docker/nss
 nss_docker_image: peaceman/grosp-nss:master
+
+# will be passed as RUST_LOG env to nss
+nss_log_level: debug

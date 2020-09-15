@@ -32,6 +32,7 @@
     dest: "{{ nss_docker_compose_project_folder }}/.env"
     content: |
       NSS_IMAGE={{ nss_docker_image }}
+      RUST_LOG={{ nss_log_level }}
 
 - name: Start nss docker compose project
   docker_compose:

@@ -1,12 +1,30 @@
 Ansible Role: nss
 =================
 
+Requirements
+------------
+
+The main task list requires a running docker and the python packages
+docker and docker-compose
+
+```yaml
+- import_role:
+    name: geerlingguy.docker
+
+- import_role:
+    name: geerlingguy.pip
+    vars:
+    pip_install_packages:
+        - name: docker
+        - name: docker-compose
+```
+
 Role Variables
 --------------
 
 Uses
 
-```
+```yaml
 # folder on the host that executes ansible
 # will be used to store the certificate authority and more
 local_data_dir: data
@@ -14,7 +32,7 @@ local_data_dir: data
 
 Defines
 
-```
+```yaml
 # will be used as dirname to store ca related files below $local_data_dir/nss
 nss_ca_dirname: ca
 
