@@ -1,2 +1,49 @@
 ---
-# tasks file for nss
+- name: Prepare folder for nss docker-compose project
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: true
+  loop:
+    - "{{ nss_docker_compose_project_folder }}"
+    - "{{ nss_docker_compose_project_folder }}/certs"
+
+- name: Copy nss certificate files
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ nss_docker_compose_project_folder }}/certs/{{ item.dest }}"
+  loop:
+    - { src: "{{ nss_ca_file }}", dest: ca.pem }
+    - { src: "{{ nss_cert_file }}", dest: edgenode.pem }
+    - { src: "{{ nss_cert_key_file }}", dest: edgenode-key.pem }
+
+- name: Add docker-compose.yml
+  copy:
+    src: docker-compose.yml
+    dest: "{{ nss_docker_compose_project_folder }}/docker-compose.yml"
+
+- name: Add nss config.yml
+  copy:
+    src: config.yml
+    dest: "{{ nss_docker_compose_project_folder }}/config.yml"
+
+- name: Generate .env file for the docker compose project
+  copy:
+    dest: "{{ nss_docker_compose_project_folder }}/.env"
+    content: |
+      NSS_IMAGE={{ nss_docker_image }}
+
+- name: Start nss docker compose project
+  docker_compose:
+    project_src: "{{ nss_docker_compose_project_folder }}"
+    remove_orphans: true
+    pull: true
+    state: present
+
+- name: UFW nss
+  include_role:
+    name: weareinteractive.ufw
+  vars:
+    ufw_reset: no
+    ufw_rules:
+      - { port: 40230, rule: allow }

@@ -26,4 +26,12 @@ nss_client_certs_group_name: nss_clients
 
 # used as subject in the server certificate that is distributed to all edge nodes
 nss_edge_node_cert_name: edgenode
+
+# used during setup of the docker compose project on the edge node
+nss_cert_file:
+# used during setup of the docker compose project on the edge node
+nss_cert_key_file:
+
+nss_docker_compose_project_folder: /opt/docker/nss
+nss_docker_image: peaceman/grosp-nss:master
 ```
