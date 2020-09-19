@@ -8,6 +8,12 @@
     - "{{ nss_docker_compose_project_folder }}"
     - "{{ nss_docker_compose_project_folder }}/certs"
 
+- name: Set permissions for the docker compose project folder
+  file:
+    path: "{{ nss_docker_compose_project_folder }}"
+    mode: 0700
+    state: directory
+
 - name: Copy nss certificate files
   copy:
     src: "{{ item.src }}"
@@ -25,11 +31,13 @@
 - name: Add nss config.yml
   copy:
     src: config.yml
+    mode: 0755
     dest: "{{ nss_docker_compose_project_folder }}/config.yml"
 
 - name: Generate .env file for the docker compose project
   copy:
     dest: "{{ nss_docker_compose_project_folder }}/.env"
+    mode: 0755
     content: |
       NSS_IMAGE={{ nss_docker_image }}
       RUST_LOG={{ nss_log_level }}
