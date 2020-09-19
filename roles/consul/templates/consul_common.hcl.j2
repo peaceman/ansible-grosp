@@ -1,6 +1,7 @@
 {% raw %}
 bind_addr = "{{ GetPublicInterfaces | include \"flags\" \"up\" | attr \"address\" }}"
 {% endraw %}
+client_addr = "0.0.0.0"
 datacenter = "{{ consul_datacenter }}"
 data_dir = "/opt/consul"
 encrypt = "{{ consul_gossip_key }}"
