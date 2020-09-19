@@ -5,6 +5,8 @@
     dest: "{{ consul_config_dir }}/{{ inventory_hostname_short }}-key.pem"
     owner: "{{ consul_user }}"
     group: "{{ consul_user }}"
+  notify:
+    - restart consul
 
 - name: Supply client certificate
   copy:
@@ -12,3 +14,5 @@
     dest: "{{ consul_config_dir }}/{{ inventory_hostname_short }}.pem"
     owner: "{{ consul_user }}"
     group: "{{ consul_user }}"
+  notify:
+    - restart consul

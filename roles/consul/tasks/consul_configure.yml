@@ -11,6 +11,8 @@
     group: "{{ consul_user }}"
   vars:
     consul_gossip_key: "{{ lookup('file', consul_gossip_key_file_internal) }}"
+  notify:
+    - restart consul
 
 - name: Create specific (client/server) consul configuration file
   template:
@@ -20,11 +22,13 @@
     group: "{{ consul_user }}"
   vars:
     consul_gossip_key: "{{ lookup('file', consul_gossip_key_file_internal) }}"
+  notify:
+    - restart consul
 
 - name: Activate consul service
   systemd:
     name: "{{ consul_service_name }}.service"
-    state: restarted
+    state: started
     enabled: yes
 
 - name: Add consul environment variables to use with the consul cli

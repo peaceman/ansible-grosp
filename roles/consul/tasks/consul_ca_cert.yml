@@ -5,3 +5,5 @@
     dest: "{{ consul_config_dir }}/consul-agent-ca.pem"
     owner: "{{ consul_user }}"
     group: "{{ consul_user }}"
+  notify:
+      - restart consul
