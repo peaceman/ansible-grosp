@@ -1,0 +1,23 @@
+x-restart-policy: &restart-policy
+  restart: unless-stopped
+
+version: "2.4"
+services:
+  docker-host:
+    image: qoomon/docker-host:2.4.3
+    <<: *restart-policy
+    cap_add: [ 'NET_ADMIN', 'NET_RAW' ]
+    mem_limit: 8M
+
+  bps:
+    image: $BPS_IMAGE
+    <<: *restart-policy
+    env_file: .env
+    ports:
+      - "127.0.0.1:$BPS_HOST_PORT:2350"
+    depends_on:
+      - docker-host
+    volumes:
+      - type: bind
+        source: ./config.yml
+        target: /opt/app/config.yml

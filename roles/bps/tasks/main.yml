@@ -1,0 +1,36 @@
+---
+- name: Prepare folder for bps docker-compose project
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: true
+    mode: 0700
+  loop:
+    - "{{ bps_docker_compose_project_folder }}"
+
+- name: Add docker-compose.yml
+  copy:
+    src: docker-compose.yml
+    dest: "{{ bps_docker_compose_project_folder }}/docker-compose.yml"
+
+- name: Add bps config.yml
+  template:
+    src: config.yml.j2
+    dest: "{{ bps_docker_compose_project_folder }}/config.yml"
+    mode: 0755
+
+- name: Generate .env file for the docker compose project
+  copy:
+    dest: "{{ bps_docker_compose_project_folder }}/.env"
+    mode: 0755
+    content: |
+      BPS_IMAGE={{ bps_docker_image }}
+      RUST_LOG={{ bps_log_level }}
+      BPS_HOST_PORT={{ bps_host_port }}
+
+- name: Start bps docker compose project
+  docker_compose:
+    project_src: "{{ bps_docker_compose_project_folder }}"
+    remove_orphans: true
+    pull: true
+    state: present

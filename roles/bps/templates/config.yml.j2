@@ -1,0 +1,10 @@
+---
+consul:
+  base_url: "http://docker-host:8500"
+  update_interval: 1s
+
+playlist:
+  upstream_base_url: "{{ bps_upstream_base_url | mandatory }}"
+  segment_signing:
+    key: "{{ bps_segment_signing_key }}"
+    duration: 5m
