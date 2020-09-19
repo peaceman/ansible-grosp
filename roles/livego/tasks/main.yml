@@ -1,0 +1,42 @@
+---
+# tasks file for livego
+- name: Ensure the working directory exists
+  file:
+    path: "{{ livego_working_dir }}"
+    state: directory
+    owner: "{{ livego_username }}"
+    group: "{{ livego_username }}"
+
+- name: Download livego release archive
+  get_url:
+    url: "{{ livego_binary_url }}"
+    dest: "{{ livego_working_dir }}/livego.tar.gz"
+    checksum: "{{ livego_binary_checksum }}"
+  register: livego_download
+  notify:
+    - restart livego
+
+- name: Update livego
+  block:
+    - name: Unarchive livego release archive
+      unarchive:
+        src: "{{ livego_working_dir }}/livego.tar.gz"
+        dest: "{{ livego_working_dir }}"
+        remote_src: true
+    - name: Ensure file ownership
+      file:
+        path: "{{ livego_working_dir }}"
+        state: directory
+        recurse: true
+        owner: "{{ livego_username }}"
+        group: "{{ livego_username }}"
+  when: livego_download.changed
+
+- name: Configure livego
+  template:
+    dest: "{{ livego_working_dir }}/config.yml"
+    src: "{{ livego_config_template_internal }}"
+    owner: "{{ livego_username }}"
+    group: "{{ livego_username }}"
+  notify:
+    - restart livego

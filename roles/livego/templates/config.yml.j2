@@ -1,0 +1,22 @@
+# Logger level
+level: {{ livego_logging_level }}
+
+# RTMP Options
+rtmp_addr: "{{ livego_rtmp_addr }}"
+read_timeout: {{ livego_rtmp_read_timeout }}
+write_timeout: {{ livego_rtmp_write_timeout }}
+
+# HLS Options
+hls_addr: "{{ livego_hls_addr }}"
+
+# API Options
+api_addr: "{{ livego_api_addr }}"
+
+{% block server %}
+server:
+{% for server in livego_servers %}
+- appname: {{ server.name }}
+  live: {{ server.live | default('true') }}
+  hls: {{ server.hls | default('true') }}
+{% endfor %}
+{% endblock %}

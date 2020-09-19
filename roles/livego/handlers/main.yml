@@ -1,0 +1,9 @@
+---
+# handlers file for livego
+- name: restart livego
+  systemd:
+    name: "{{ livego_service_name }}.service"
+    state: restarted
+    scope: user
+  become: true
+  become_user: "{{ livego_username }}"

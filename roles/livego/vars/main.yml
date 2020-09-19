@@ -1,0 +1,4 @@
+---
+# vars file for livego
+livego_config_template_default: config.yml.j2
+livego_config_template_internal: "{{ livego_config_template | default(livego_config_template_default) }}"
