@@ -7,4 +7,4 @@ playlist:
   upstream_base_url: "{{ bps_upstream_base_url | mandatory }}"
   segment_signing:
     key: "{{ bps_segment_signing_key }}"
-    duration: 5m
+    duration: "{{ bps_segment_signing_duration }}"
