@@ -9,41 +9,17 @@ docker and docker-compose
 
 ```yaml
 - import_role:
-    name: geerlingguy.docker
-
-- import_role:
-    name: geerlingguy.pip
-    vars:
-    pip_install_packages:
-        - name: docker
-        - name: docker-compose
+    name: peaceman.docker
 ```
 
 Role Variables
 --------------
 
-Uses
-
-```yaml
-# folder on the host that executes ansible
-# will be used to store the certificate authority and more
-local_data_dir: data
-```
-
 Defines
 
 ```yaml
-# will be used as dirname to store ca related files below $local_data_dir/nss
-nss_ca_dirname: ca
-
-# will be used as dirname to store certificates
-nss_certs_dirname: certs
-
 # will be used to determine the necessary client certificates for nss
 nss_client_certs_group_name: nss_clients
-
-# used as subject in the server certificate that is distributed to all edge nodes
-nss_edge_node_cert_name: edgenode
 
 # used during setup of the docker compose project on the edge node
 nss_cert_file:
@@ -53,3 +29,9 @@ nss_cert_key_file:
 nss_docker_compose_project_folder: /opt/docker/nss
 nss_docker_image: peaceman/grosp-nss:master
 ```
+
+Dependencies
+------------
+
+Roles
+* peaceman.pki

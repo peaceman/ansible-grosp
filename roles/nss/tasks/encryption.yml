@@ -1,18 +1,22 @@
 ---
-- name: Ensure the local data directory for nss exists
-  file:
-    path: "{{ local_data_dir }}/nss"
-    state: directory
-
-- include_tasks: encryption_ca.yml
+- name: Create certificate authority
+  include_role:
+    name: peaceman.pki
+    tasks_from: ca.yml
 
 - name: Generate nss server certificate that is shared between all edge nodes
-  include_tasks: encryption_cert.yml
+  include_role:
+    name: peaceman.pki
+    tasks_from: cert.yml
   vars:
-    cert_name: "{{ nss_edge_node_cert_name }}"
+    cert_name: nss-edge-node
 
 - name: Create nss client certs for hosts in group {{ nss_client_certs_group_name }}
-  include_tasks: encryption_cert.yml
+  include_role:
+    name: peaceman.pki
+    tasks_from: cert.yml
+  vars:
+    cert_name: nss-{{ ihs }}
   loop: >
     {{
       groups[nss_client_certs_group_name]
@@ -21,4 +25,4 @@
       | list
     }}
   loop_control:
-    loop_var: cert_name
+    loop_var: ihs

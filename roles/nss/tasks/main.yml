@@ -19,9 +19,9 @@
     src: "{{ item.src }}"
     dest: "{{ nss_docker_compose_project_folder }}/certs/{{ item.dest }}"
   loop:
-    - { src: "{{ nss_ca_file }}", dest: ca.pem }
-    - { src: "{{ nss_cert_file }}", dest: edgenode.pem }
-    - { src: "{{ nss_cert_key_file }}", dest: edgenode-key.pem }
+    - { src: "{{ nss_ca_file_internal }}", dest: ca.pem }
+    - { src: "{{ nss_cert_file_internal }}", dest: edgenode.pem }
+    - { src: "{{ nss_cert_key_file_internal }}", dest: edgenode-key.pem }
 
 - name: Add docker-compose.yml
   copy:
