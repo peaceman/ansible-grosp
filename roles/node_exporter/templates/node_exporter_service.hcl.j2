@@ -1,0 +1,8 @@
+service {
+    id = "{{ inventory_hostname }}-node-exporter"
+    name = "node-exporter"
+    port = 9100
+    meta {
+        node_group = "{{ node_exporter_node_group }}"
+    }
+}

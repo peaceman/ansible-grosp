@@ -1,0 +1,29 @@
+---
+- name: Copy CA certificate to node via peaceman.pki
+  include_role:
+    name: peaceman.pki
+    tasks_from: copy_ca.yml
+  vars:
+    dest: /etc/node_exporter/ca.cert
+    mode: "640"
+    group: "{{ node_exporter_system_group }}"
+
+- name: Copy node exporter certs to node via peaceman.pki
+  include_role:
+    name: peaceman.pki
+    tasks_from: copy_cert.yml
+  vars:
+    dest: "/etc/node_exporter/{{ item.dest }}"
+    src: "{{ item.src }}"
+    mode: "640"
+    group: "{{ node_exporter_system_group }}"
+  loop:
+    - dest: tls.cert
+      src: node-exporter.pem
+    - dest: tls.key
+      src: node-exporter-key.pem
+
+- name: trigger node_exporter restart
+  command: /bin/true
+  notify:
+      - restart node_exporter

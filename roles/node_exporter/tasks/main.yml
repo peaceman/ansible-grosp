@@ -1,0 +1,49 @@
+---
+# tasks file for node_exporter
+- name: Create node exporter cert dir
+  file:
+    path: /etc/node_exporter
+    state: directory
+    owner: root
+    group: root
+    mode: 0775
+
+- name: Copy certificate files via peaceman.pki
+  include_tasks: certs_pki.yml
+  when: >
+    node_exporter_ca_file is not defined
+    and node_exporter_cert_file is not defined
+    and node_exporter_cert_key_file is not defined
+  register: cert_pki
+
+- name: Copy certificate files from given paths
+  include_tasks: certs_paths.yml
+  when: cert_pki is not defined
+
+- name: Install node exporter
+  import_role:
+    name: cloudalchemy.node-exporter
+  vars:
+    node_exporter_tls_server_config:
+      cert_file: /etc/node_exporter/tls.cert
+      key_file: /etc/node_exporter/tls.key
+      client_auth_type: RequireAndVerifyClientCert
+      client_ca_file: /etc/node_exporter/ca.cert
+
+- name: Allow access to the node exporter port
+  include_role:
+    name: weareinteractive.ufw
+  vars:
+      ufw_reset: no
+      ufw_rules:
+        - port: 9100
+          rule: allow
+          comment: allow access to node exporter data
+
+- name: Add consul service definition for the node exporter
+  import_role:
+    name: peaceman.grosp.consul
+    tasks_from: consul_service_definition.yml
+  vars:
+    name: node-exporter
+    template: node_exporter_service.hcl.j2
