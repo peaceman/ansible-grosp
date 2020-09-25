@@ -18,7 +18,7 @@
 
 - name: Copy certificate files from given paths
   include_tasks: certs_paths.yml
-  when: cert_pki is not defined
+  when: cert_pki is skipped
 
 - name: Install node exporter
   import_role:
@@ -29,6 +29,16 @@
       key_file: /etc/node_exporter/tls.key
       client_auth_type: RequireAndVerifyClientCert
       client_ca_file: /etc/node_exporter/ca.cert
+
+- name: Ensure file permissions for certificate files
+  file:
+    path: "/etc/node_exporter/{{ item }}"
+    mode: 0640
+    group: "{{ node_exporter_system_group }}"
+  loop:
+    - tls.cert
+    - tls.key
+    - ca.cert
 
 - name: Allow access to the node exporter port
   include_role:

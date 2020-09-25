@@ -3,8 +3,6 @@
   copy:
     src: "{{ node_exporter_ca_file | mandatory }}"
     dest: /etc/node_exporter/ca.cert
-    mode: 0640
-    group: "{{ node_exporter_system_group }}"
   notify:
     - restart node_exporter
 
@@ -12,8 +10,6 @@
   copy:
     src: "{{ item.src }}"
     dest: "/etc/node_exporter/{{ item.dest }}"
-    mode: 0640
-    group: "{{ node_exporter_system_group }}"
   loop:
     - dest: tls.cert
       src: "{{ node_exporter_cert_file | mandatory }}"

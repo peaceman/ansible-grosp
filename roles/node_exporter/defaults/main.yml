@@ -1,5 +1,4 @@
 ---
 # defaults file for node_exporter
-node_exporter_system_user: node-exp
 node_exporter_system_group: node-exp
 node_exporter_node_group: main
