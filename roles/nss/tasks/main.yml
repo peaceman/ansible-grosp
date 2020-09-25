@@ -1,4 +1,12 @@
 ---
+- name: UFW nss
+  include_role:
+    name: weareinteractive.ufw
+  vars:
+    ufw_reset: no
+    ufw_rules:
+      - { port: 40230, rule: allow }
+
 - name: Prepare folder for nss docker-compose project
   file:
     path: "{{ item }}"
@@ -48,11 +56,3 @@
     remove_orphans: true
     pull: true
     state: present
-
-- name: UFW nss
-  include_role:
-    name: weareinteractive.ufw
-  vars:
-    ufw_reset: no
-    ufw_rules:
-      - { port: 40230, rule: allow }
