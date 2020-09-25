@@ -4,7 +4,7 @@ bps_docker_compose_project_folder: /opt/docker/bps
 bps_docker_image: peaceman/grosp-bps:master
 
 # will be passed as RUST_LOG env to bps
-bps_log_level: debug
+bps_log_level: info
 bps_host_port: 2350
 bps_segment_signing_key: ""
 bps_segment_signing_duration: 5m
