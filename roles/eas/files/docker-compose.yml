@@ -1,0 +1,36 @@
+x-restart-policy: &restart-policy
+  restart: unless-stopped
+
+version: "2.4"
+services:
+  docker-host:
+    image: qoomon/docker-host:2.4.3
+    <<: *restart-policy
+    cap_add: [ 'NET_ADMIN', 'NET_RAW' ]
+    mem_limit: 8M
+
+  eas:
+    image: $EAS_IMAGE
+    <<: *restart-policy
+    env_file: .env
+    depends_on:
+      - docker-host
+    volumes:
+      - type: bind
+        source: ./config
+        target: /opt/app/config
+      # - type: bind
+      #   source: ./extra-vars.yml
+      #   target: /opt/app/extra-vars.yml
+      # - type: bind
+      #   source: ./user-data-base.yml
+      #   target: /opt/app/user-data-base.yml
+      - type: bind
+        source: $EAS_CLOUD_INIT_FILE_FOLDER
+        target: /opt/app/cloud-init-files
+      - type: bind
+        source: $EAS_CERT_FOLDER
+        target: /opt/app/certs
+      - type: bind
+        source: ./node_groups
+        target: /opt/app/node_groups

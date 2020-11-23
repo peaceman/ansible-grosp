@@ -1,0 +1,33 @@
+consul_server_nodes:
+{{ consul_server_nodes | mandatory | to_nice_yaml | indent(2, true) }}
+
+consul_gossip_key_file: /root/consul-gossip.key
+consul_ca_file: /root/consul-ca.pem
+nss_ca_file: /root/ca.pem
+nss_cert_file: /root/nss-cert.pem
+nss_cert_key_file: /root/nss-cert-key.p8
+
+mail_aliases_root: {{ mail_aliases_root | mandatory }}
+acme_enabled: false
+
+nginx_ssl_dhparam_enable: false
+nginx_brotli_enabled: false
+
+proxy_cache_cert_file: /root/proxy-cache.pem
+proxy_cache_cert_key_file: /root/proxy-cache-key.pem
+proxy_cache_upstream_url: {{ proxy_cache_upstream_url }}
+
+elk_logstash_host: {{ elk_logstash_host }}
+elk_ca_file: /root/ca.pem
+elk_beat_cert_file: /root/beat-cert.pem
+elk_beat_cert_key_file: /root/beat-key.p8
+
+elk_filebeat_nginx_access_logs:
+  - /home/*/logs/nginx.access.log
+elk_filebeat_nginx_error_logs:
+  - /home/*/logs/nginx.error.log
+
+node_exporter_node_group: edge
+node_exporter_ca_file: /root/ca.pem
+node_exporter_cert_file: /root/node-exporter.pem
+node_exporter_cert_key_file: /root/node-exporter-key.pem

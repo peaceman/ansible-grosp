@@ -1,0 +1,65 @@
+---
+- name: Prepare folder for eas docker-compose project
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: true
+    mode: 0700
+  loop:
+    - "{{ eas_docker_compose_project_folder }}"
+
+- name: Prepare node group discovery and config folder
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+  loop:
+    - "{{ eas_docker_compose_project_folder }}/node_groups"
+    - "{{ eas_docker_compose_project_folder }}/config"
+
+- name: Add docker-compose.yml
+  copy:
+    src: docker-compose.yml
+    dest: "{{ eas_docker_compose_project_folder }}/docker-compose.yml"
+
+- name: Add eas config.yml
+  template:
+    src: config.yml.j2
+    dest: "{{ eas_docker_compose_project_folder }}/config/config.yml"
+    mode: 0755
+
+- name: Add eas extra-vars.yml
+  template:
+    src: extra-vars.yml.j2
+    dest: "{{ eas_docker_compose_project_folder }}/config/extra-vars.yml"
+    mode: 0755
+
+- name: Add eas user-data-base.yml
+  template:
+    src: user-data-base.yml.j2
+    dest: "{{ eas_docker_compose_project_folder }}/config/user-data-base.yml"
+    mode: 0755
+
+- name: Add default node group config file
+  copy:
+    dest: "{{ eas_docker_compose_project_folder }}/node_groups/std.yml"
+    content: "{{ eas_default_node_group | to_nice_yaml }}"
+    mode: 0644
+
+- name: Generate .env file for the docker compose project
+  copy:
+    dest: "{{ eas_docker_compose_project_folder }}/.env"
+    mode: 0755
+    content: |
+      EAS_IMAGE={{ eas_docker_image }}
+      RUST_LOG={{ eas_log_level }}
+      EAS_CLOUD_INIT_FILE_FOLDER={{ eas_cloud_init_file_folder }}
+      EAS_CERT_FOLDER={{ eas_cert_folder }}
+      APP_CONFIG=config/config.yml
+
+- name: Start eas docker compose project
+  docker_compose:
+    project_src: "{{ eas_docker_compose_project_folder }}"
+    remove_orphans: true
+    pull: true
+    state: present

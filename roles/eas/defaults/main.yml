@@ -1,0 +1,62 @@
+---
+# defaults file for eas
+eas_docker_compose_project_folder: /opt/docker/eas
+eas_docker_image: peaceman/grosp-eas:master
+
+# will be passed as RUST_LOG env to eas
+eas_log_level: info
+
+# folder on the host system that will be shared into the eas container
+# used for files that are required by the cloud init setup process
+eas_cloud_init_file_folder: "{{ eas_docker_compose_project_folder }}/cloud-init-files"
+
+# folder on the host system that will be shared into the eas container
+# user for certificate files (e.g. nss client cert)
+eas_cert_folder: "{{ eas_docker_compose_project_folder }}/certs"
+
+eas_cloud_init_files:
+  - consul-ca.pem
+  - consul-gossip.key
+  - ca.pem
+  - nss-cert.pem
+  - nss-cert-key.p8
+  - proxy-cache.pem
+  - proxy-cache-key.pem
+  - beat-cert.pem
+  - beat-key.p8
+  - node-exporter.pem
+  - node-exporter-key.pem
+
+eas_cloud_provider_config:
+  # hetzner sample
+  # type: hetzner
+  # server_type: cx11
+  # image: ubuntu-20.04
+  # ssh_keys:
+  #   - peaceman@peaceDesk
+  # group_label_name: grosp-eas/node-group
+  # api_address: https://api.hetzner.cloud
+  # api_token: redacted
+
+eas_dns_provider_config:
+  # hetzner sample
+  # type: hetzner
+  # zone_apex: n2305.link
+  # record_ttl: 42
+  # api_token: redacted
+  # address: https://dns.hetzner.com
+
+eas_node_hostname_suffix:
+
+eas_default_node_group:
+  name: std
+  config:
+    min_nodes: 1
+    min_spare_nodes: 1
+    max_spare_nodes: 1
+    node_bandwidth_capacity:
+      tx_bps: 10000
+      rx_bps: 10000
+    bandwidth_thresholds:
+      scale_up_percent: 70
+      scale_down_percent: 40

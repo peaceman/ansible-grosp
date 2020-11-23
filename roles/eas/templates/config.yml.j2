@@ -1,0 +1,57 @@
+---
+node_stats:
+  type: nss
+  tls:
+    ca_cert_path: cloud-init-files/ca.pem
+    client_cert_path: certs/nss-client-cert.pem
+    client_key_path: certs/nss-client-key.p8
+    target_sni_name: nss-edge-node
+  port: 40230
+
+cloud_provider:
+{{ eas_cloud_provider_config | to_nice_yaml | indent(2, true) }}
+
+dns_provider:
+{{ eas_dns_provider_config | to_nice_yaml | indent(2, true) }}
+
+node_discovery:
+  interval: 5s
+
+node_discovery_provider:
+  type: consul
+  service_name: edge
+  address: http://docker-host:8500
+
+node_group_discovery_providers:
+  - type: file
+    path: node_groups
+  - type: consul
+    address: http://docker-host:8500
+    key_prefix: eas_node_groups
+
+node_exploration:
+  interval: 5s
+
+node_group_discovery:
+  interval: 5s
+
+cloud_init:
+  user_data_base_file_path: config/user-data-base.yml
+  extra_vars_base_file_path: config/extra-vars.yml
+  extra_vars_destination_path: /root/extra-vars.yml
+  user_data_files:
+{% for file in eas_cloud_init_files %}
+    - destination: /root/{{ file }}
+      source: cloud-init-files/{{ file }}
+{% endfor %}
+
+node_group_scaler:
+  node_hostname_suffix: {{ eas_node_hostname_suffix | mandatory }}
+  scale_lock_timeout_s: 600
+
+node_group_discovery_timeout: 2m
+
+node_controller:
+  draining_time: 60s
+  provisioning_timeout: 10m
+  discovery_timeout: 2m
