@@ -48,6 +48,7 @@ cloud_init:
 node_group_scaler:
   node_hostname_suffix: {{ eas_node_hostname_suffix | mandatory }}
   scale_lock_timeout_s: 600
+  startup_cooldown: 15s
 
 node_group_discovery_timeout: 2m
 
@@ -55,3 +56,4 @@ node_controller:
   draining_time: 60s
   provisioning_timeout: 10m
   discovery_timeout: 2m
+  exploration_timeout: 2m
