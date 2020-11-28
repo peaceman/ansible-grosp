@@ -1,0 +1,35 @@
+---
+# tasks file for nginx_rtmp_hls
+
+- name: Prepare folder for the docker-compose project
+  file:
+    path: "{{ nginx_rtmp_hls_docker_compose_project_folder }}"
+    state: directory
+    recurse: true
+
+- name: Checkout project
+  git:
+    repo: "{{ nginx_rtmp_hls_git_repo_url }}"
+    dest: "{{ nginx_rtmp_hls_docker_compose_project_folder }}"
+    version: "{{ nginx_rtmp_hls_git_version }}"
+
+- name: Prepare nginx.conf
+  copy:
+    dest: "{{ nginx_rtmp_hls_docker_compose_project_folder }}/nginx.conf"
+    src: "{{ nginx_rtmp_hls_docker_compose_project_folder }}/nginx.conf.example"
+    remote_src: true
+
+- name: Generate .env
+  copy:
+    dest: "{{ nginx_rtmp_hls_docker_compose_project_folder }}/.env"
+    content: |
+      RTMP_PORT={{ nginx_rtmp_hls_rtmp_port }}
+      HTTP_PORT={{ nginx_rtmp_hls_http_port }}
+      JWT_SIGNING_KEY={{ nginx_rtmp_hls_jwt_signing_key | mandatory }}
+
+- name: Start the docker-compose project
+  docker_compose:
+    project_src: "{{ nginx_rtmp_hls_docker_compose_project_folder }}"
+    remove_orphans: true
+    pull: true
+    state: present
