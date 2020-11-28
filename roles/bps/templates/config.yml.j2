@@ -8,3 +8,9 @@ playlist:
   segment_signing:
     key: "{{ bps_segment_signing_key }}"
     duration: "{{ bps_segment_signing_duration }}"
+  jwt_validation:
+    secret: "{{ bps_jwt_validation_secret }}"
+    stream_name_pattern: "{{ bps_jwt_validation_stream_name_pattern }}"
+
+http:
+  socket: "[::]:2350"
