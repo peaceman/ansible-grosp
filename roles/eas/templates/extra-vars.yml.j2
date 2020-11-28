@@ -16,6 +16,7 @@ nginx_brotli_enabled: false
 proxy_cache_cert_file: /root/proxy-cache.pem
 proxy_cache_cert_key_file: /root/proxy-cache-key.pem
 proxy_cache_upstream_url: {{ proxy_cache_upstream_url }}
+proxy_cache_hmac_secret: {{ proxy_cache_hmac_secret }}
 
 elk_logstash_host: {{ elk_logstash_host }}
 elk_ca_file: /root/ca.pem

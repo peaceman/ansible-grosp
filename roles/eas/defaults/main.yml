@@ -55,8 +55,8 @@ eas_default_node_group:
     min_spare_nodes: 1
     max_spare_nodes: 1
     node_bandwidth_capacity:
-      tx_bps: 10000
-      rx_bps: 10000
+      tx_bps: 10_000_000
+      rx_bps: 10_000_000
     bandwidth_thresholds:
       scale_up_percent: 70
       scale_down_percent: 40
