@@ -7,6 +7,6 @@ http:
 
 node_stats:
   bandwidth:
-    tx_file: /host/sys/class/net/eth0/statistics/tx_bytes
-    rx_file: /host/sys/class/net/eth0/statistics/rx_bytes
-    update_interval: 2s
+    tx_file: {{ nss_bandwidth_tx_file }}
+    rx_file: {{ nss_bandwidth_rx_file }}
+    update_interval: {{ nss_bandwidth_update_interval }}

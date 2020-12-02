@@ -37,8 +37,8 @@
     dest: "{{ nss_docker_compose_project_folder }}/docker-compose.yml"
 
 - name: Add nss config.yml
-  copy:
-    src: config.yml
+  template:
+    src: config.yml.j2
     mode: 0755
     dest: "{{ nss_docker_compose_project_folder }}/config.yml"
 

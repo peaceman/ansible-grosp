@@ -9,3 +9,7 @@ nss_docker_image: peaceman/grosp-nss:master
 
 # will be passed as RUST_LOG env to nss
 nss_log_level: debug
+
+nss_bandwidth_update_interval: 10s
+nss_bandwidth_tx_file: /host/sys/class/net/eth0/statistics/tx_bytes
+nss_bandwidth_rx_file: /host/sys/class/net/eth0/statistics/rx_bytes
