@@ -14,10 +14,9 @@
     version: "{{ nginx_rtmp_hls_git_version }}"
 
 - name: Prepare nginx.conf
-  copy:
+  template:
     dest: "{{ nginx_rtmp_hls_docker_compose_project_folder }}/nginx.conf"
-    src: "{{ nginx_rtmp_hls_docker_compose_project_folder }}/nginx.conf.example"
-    remote_src: true
+    src: nginx.conf.j2
 
 - name: Generate .env
   copy:

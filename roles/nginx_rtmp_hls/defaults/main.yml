@@ -10,3 +10,6 @@ nginx_rtmp_hls_jwt_signing_key:
 
 nginx_rtmp_hls_rtmp_port: 1935
 nginx_rtmp_hls_http_port: "127.0.0.1:4202"
+
+nginx_rtmp_hls_fragment_length: 10s
+nginx_rtmp_hls_directives: []
