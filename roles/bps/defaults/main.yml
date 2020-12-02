@@ -10,4 +10,4 @@ bps_segment_signing_key: ""
 bps_segment_signing_duration: 5m
 
 bps_jwt_validation_secret: random
-bps_jwt_validation_stream_name_pattern: (.+)\\.m3u8
+bps_jwt_validation_stream_name_pattern: ([^/]+)\\.m3u8
